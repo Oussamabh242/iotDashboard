@@ -4,7 +4,7 @@ from datetime import datetime
 import random
 import time
 
-client = MongoClient("mongodb+srv://oussamabh242:oussama.bh@cluster0.zhr236f.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+client = MongoClient("")
 
 db = client['test']
 
