@@ -1,17 +1,21 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"iotserver/db/mongodb"
+	"iotserver/db/sqlite"
+  "database/sql"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
+  _ "embed"
 
 	"github.com/joho/godotenv"
-
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/cors"
 )
 
@@ -81,6 +85,9 @@ func oldData(w http.ResponseWriter , r *http.Request){
 }
 
 func main()  {
+  fmt.Println("--------------")
+  runSqlite()
+  fmt.Println("----------------")
 
   if err := godotenv.Load(); err!= nil {
     log.Println("NO .env file found") 
@@ -115,4 +122,54 @@ func main()  {
   handler := corsHandler.Handler(http.DefaultServeMux)
 
   log.Fatal(http.ListenAndServe(":2020", handler))
+}
+
+var ddl string
+
+func runSqlite()  {
+  
+  ctx := context.Background()
+  db,err := sql.Open("sqlite3" , "dev.db") 
+  if err != nil{
+    fmt.Println(err)
+  }
+  if _ , err := db.ExecContext(ctx ,ddl); err != nil {
+    fmt.Println(err)
+  }
+  queries:= sqlite.New(db) 
+  // user ,err := queries.CreateUser(ctx ,sqlite.CreateUserParams{
+  //   Name: "Oussama Ben Hassen",
+  //   Email: "oussama@example.com",
+  //   Password: "oussama",
+  // })
+  // if err != nil{
+  //   fmt.Println("error while creating user" , err)
+  // }
+  // _ ,err = queries.CreateProject(ctx ,sqlite.CreateProjectParams{
+  //   Name: "something 1",
+  //   Owner: 1,
+  // });
+  // if err != nil{
+  //   fmt.Println("error while creating project")
+  // }
+  // _ ,err = queries.CreateProject(ctx ,sqlite.CreateProjectParams{
+  //   Name: "something 2",
+  //   Owner: 1,
+  // });
+  // if err != nil{
+  //   fmt.Println("error while creating project")
+  // }
+  // _ ,err = queries.CreateProject(ctx ,sqlite.CreateProjectParams{
+  //   Name: "something 3",
+  //   Owner: 2,
+  // });
+  // if err != nil{
+  //   fmt.Println("error while creating project3", err)
+  // }
+  // fmt.Println("User created : " , user)
+  projects  , err := queries.GetUserProjects(ctx,1)
+  if err != nil{
+    fmt.Println("getting a user : " , err)
+  }
+  fmt.Println(projects)
 }

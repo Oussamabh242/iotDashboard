@@ -1,0 +1,14 @@
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT ,
+  name TEXT NOT NULL , 
+  email TEXT NOT NULL ,
+  password TEXT NOT NULL 
+);
+
+CREATE TABLE projects (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL , 
+  owner INTEGER NOT NULL , 
+  FOREIGN KEY(owner) REFERENCES users(id)
+);
+

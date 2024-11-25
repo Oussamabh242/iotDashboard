@@ -12,6 +12,8 @@ import {
 } from "chart.js";
 import TemperatureDisplay from "./Temperature";
 import Something from "./something";
+import Lumiere from "./Lumiere";
+import Ph from "./Ph";
 
 // Register the required Chart.js components
 ChartJS.register(
@@ -23,7 +25,7 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
-const NutrChart = ({airTemperature , chartData , soilMoisture, airMoisture , solTemperature} ) => {
+const NutrChart = ({airTemperature , chartData , soilMoisture, airMoisture , solTemperature,lumiere,ph} ) => {
     
   
   
@@ -71,12 +73,12 @@ const NutrChart = ({airTemperature , chartData , soilMoisture, airMoisture , sol
     <tr>
       <td className="px-4 py-2 text-center text-sm text-gray-700">
         <div className="flex justify-center items-center">
-          <TemperatureDisplay temperature={airTemperature} />
+          <Lumiere lumiere={lumiere} />
         </div>
       </td>
       <td className="px-4 py-2 text-center text-sm text-gray-700">
         <div className="flex justify-center items-center">
-          <TemperatureDisplay temperature={solTemperature} />
+          <Ph ph={ph} />
         </div>
       </td>
           </tr>
@@ -89,8 +91,8 @@ const NutrChart = ({airTemperature , chartData , soilMoisture, airMoisture , sol
 
     <div className="flex justify-center">
       <div className="flex items-center justify-center w-full overflow-hidden">
-        <Something value={soilMoisture} nameChart={"Humidite Sol"} />
         <Something value={airMoisture} nameChart={"Humidite Air"} />
+        <Something value={soilMoisture} nameChart={"Humidite Sol"} />
       </div>
     </div>
    

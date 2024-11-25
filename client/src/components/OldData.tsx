@@ -3,7 +3,6 @@ import SideBar from "./SideBar";
 import NutrChart from "./NutrChart";
 
 const OldData= () => {
-  const [data , setData] = useState()
   const [chartData, setChartData] = useState({
     labels: [], // Timestamps for X-axis
     datasets: [
@@ -34,9 +33,11 @@ const OldData= () => {
   const [solTemperature, setSolTemperature] = useState<any>(null);
   const [soilMoistrue, setSoilMoisture] = useState<any>(null) ;
   const [airMoistrue, setAirMoisture] = useState<any>(null) ;
+  const [lumiere , setLumiere] = useState<any>(null) ; 
+  const [ph , setPh] = useState<any>(null) ; 
   useEffect(() => {
     // Example API URL
-    const url = 'http://localhost:2020/olddata?period=7'; // replace with your API URL
+    const url = 'http://localhost:2020/olddata?period=30'; // replace with your API URL
 
     fetch(url)
       .then((response) => {
@@ -47,11 +48,14 @@ const OldData= () => {
       })
       .then((data) => {
         console.log(data)
-        setSolTemperature( data.temperature_sol.toFixed(1))
-        setAirTemperature(data.temperature_air.toFixed(1))
-        setSoilMoisture(data.humidite_sol.toFixed(1))
-        setAirMoisture(data.humidite_air.toFixed(1))
+        setSolTemperature( data.temperature_sol.toFixed(1)); 
+        setAirTemperature(data.temperature_air.toFixed(1)); 
+        setSoilMoisture(data.humidite_sol.toFixed(1)); 
+        setAirMoisture(data.humidite_air.toFixed(1)) ;
+        setLumiere(data.lumiere.toFixed(1)) ;
+        setPh(data.pH_sol.toFixed(1));  
         setChartData(processData(data.niveau_nutrimets))
+        
          // Set the fetched data in state
       })
       .catch((error) => {
@@ -69,6 +73,8 @@ const OldData= () => {
           soilMoisture={soilMoistrue} 
           airMoisture={airMoistrue} 
           solTemperature={solTemperature}
+          lumiere={lumiere}
+          ph={ph}
           />
 
       </div>
@@ -127,7 +133,6 @@ const processData = (data: any) => {
         },
       ],
     };
-    console.log(thing)
     return thing
   };
 

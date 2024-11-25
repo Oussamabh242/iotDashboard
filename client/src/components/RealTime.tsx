@@ -34,18 +34,22 @@ const RealTime = () => {
   const [solTemperature, setSolTemperature] = useState<any>(null);
   const [soilMoistrue, setSoilMoisture] = useState<any>(null) ;
   const [airMoistrue, setAirMoisture] = useState<any>(null) ;
+  const [lumiere , setLumiere] = useState<any>(null) ;
+  const [ph, setPh] = useState<any>(null) ;
   useEffect(() => {
     // Create a new EventSource to listen to the server
     const eventSource = new EventSource("http://localhost:2020/realtime?diff=20");
 
     eventSource.onmessage = (event: any) => {
       const data = JSON.parse(event.data); // Parse the incoming JSON data
-      console.log(data[0].HumiditeSol)
+      console.log(data[0])
       setChartData(processData(data));
       setAirTemperature(Math.round(data[0].TemperatureAir));
       setSolTemperature(Math.round(data[0].TemperatureSol));
-      setSoilMoisture((data[0].HumiditeSol).toFixed(1))
-      setAirMoisture((data[0].HumiditeAir).toFixed(1))
+      setSoilMoisture((data[0].HumiditeSol).toFixed(1));
+      setAirMoisture((data[0].HumiditeAir).toFixed(1)); 
+      setLumiere((data[0].Lumiere).toFixed(1)); 
+      setPh((data[0].PHSol).toFixed(1)); 
     };
 
     eventSource.onerror = (error) => {
@@ -67,6 +71,8 @@ const RealTime = () => {
           soilMoisture={soilMoistrue} 
           airMoisture={airMoistrue} 
           solTemperature={solTemperature}
+          lumiere = {lumiere}
+          ph={ph}
           />
 
       </div>
